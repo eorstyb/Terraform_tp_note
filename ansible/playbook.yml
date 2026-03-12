@@ -1,0 +1,51 @@
+- name: "Configuration de la BDD"
+  hosts: bdd
+  become: yes
+  vars:
+    db_name: "cytech"
+    db_user: "cytech_usr"
+    db_password: "password"
+    # On récupère l'IP dynamiquement depuis l'inventaire
+    bdd_ip: "{{ ansible_host }}"
+  roles:
+    - bdd
+
+- name: "Configuration de l'APP"
+  hosts: app
+  become: yes
+  vars:
+    db_name: "cytech"
+    db_user: "cytech_usr"
+    # L'IP de la BDD est nécessaire ici pour le template app.py.j2
+    bdd_ip: "192.168.100.135" 
+    remote_user: "ethan"
+    app_root: "/opt/my_app"
+  roles:
+    - app
+
+- name: Configuration de l'Application Flask
+  hosts: app
+  become: yes
+  roles:
+    - app
+
+- name: Test de l'API (Validation du TP)
+  hosts: localhost
+  connection: local
+  become: no
+  tasks:
+    - name: Attendre que l'application soit prête
+      wait_for:
+        host: "192.168.100.134"
+        port: 8080
+        timeout: 30
+
+    - name: Effectuer une requête sur l'API
+      uri:
+        url: "http://192.168.100.134:8080"
+        return_content: yes
+      register: api_response
+
+    - name: Afficher le résultat du test
+      debug:
+        msg: "La réponse de l'API est : {{ api_response.content }}"

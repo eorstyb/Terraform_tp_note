@@ -1,0 +1,55 @@
+- name: Installer PostgreSQL et dépendances Python pour Ansible
+  apt:
+    name: ["postgresql", "postgresql-contrib", "python3-psycopg2"]
+    state: present
+    update_cache: yes
+
+- name: Créer le groupe cytech_grp
+  group:
+    name: cytech_grp
+    state: present
+
+- name: Créer l'utilisateur cytech_usr
+  user:
+    name: cytech_usr
+    groups: cytech_grp
+    append: yes
+
+- name: Créer la base de données cytech
+  postgresql_db:
+    name: cytech
+    owner: cytech_usr
+  become: yes
+  become_user: postgres
+
+- name: Configurer PostgreSQL pour écouter sur toutes les interfaces
+  lineinfile:
+    path: /etc/postgresql/14/main/postgresql.conf # Vérifie la version (14 ou 15)
+    regexp: "^#?listen_addresses"
+    line: "listen_addresses = '*'"
+  notify: restart postgresql
+
+- name: Autoriser la connexion depuis la VM APP uniquement (pg_hba.conf)
+  postgresql_pg_hba:
+    dest: "/etc/postgresql/14/main/pg_hba.conf"
+    contype: host
+    databases: cytech
+    users: cytech_usr
+    address: "192.168.100.134/32" # IP de ton APP
+    method: md5
+  become: yes
+  become_user: postgres
+  notify: restart postgresql
+
+- name: Créer la table et insérer le nom
+  postgresql_query:
+    db: cytech
+    login_user: postgres
+    query: |
+      CREATE TABLE IF NOT EXISTS cytech_usr (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100)
+      );
+      INSERT INTO cytech_usr (name) VALUES ('Ethan') ON CONFLICT DO NOTHING;
+  become: yes
+  become_user: postgres

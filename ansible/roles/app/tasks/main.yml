@@ -1,0 +1,27 @@
+- name: Installer Python3-venv
+  apt:
+    name: python3-venv
+    state: present
+
+- name: Créer le répertoire de l'application
+  file:
+    path: /opt/my_app
+    state: directory
+    owner: ethan
+
+- name: Installer Flask dans un environnement virtuel
+  pip:
+    name: flask, psycopg2-binary
+    virtualenv: /opt/my_app/venv
+    virtualenv_command: python3 -m venv
+
+- name: Déployer le code de l'application (template)
+  template:
+    src: app.py.j2
+    dest: /opt/my_app/app.py
+
+- name: Créer le service systemd pour lancer l'app
+  template:
+    src: my_app.service.j2
+    dest: /etc/systemd/system/my_app.service
+  notify: reload systemd

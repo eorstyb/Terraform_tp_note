@@ -1,0 +1,21 @@
+#cloud-config
+    hostname: test-ubuntu
+    timezone: America/Toronto
+    users:
+      - default
+      - name: ${var.username}
+        groups:
+          - sudo
+        shell: /bin/bash
+        ssh_authorized_keys:
+          - ${trimspace(file(var.public-ssh-key-path))}
+        sudo: ALL=(ALL) NOPASSWD:ALL
+    package_update: true
+    packages:
+      - qemu-guest-agent
+      - net-tools
+      - curl
+    runcmd:
+      - systemctl enable qemu-guest-agent
+      - systemctl start qemu-guest-agent
+      - echo "done" > /tmp/cloud-config.done
