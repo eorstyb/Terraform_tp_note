@@ -1,0 +1,16 @@
+---
+# Utilisateur système (celui du Cloud-init)
+ssh_user: "ethan"
+
+# Configuration PostgreSQL
+db_name: "cytech"
+db_user: "cytech_usr"
+db_password: "password" # Changez-le si vous voulez
+
+# Configuration Application
+app_port: 8080
+app_root: "/opt/my_app"
+
+# Adresses IP (Utilisées pour le pg_hba.conf et la connexion Flask)
+app_ip: "192.168.100.134"
+bdd_ip: "192.168.100.135"

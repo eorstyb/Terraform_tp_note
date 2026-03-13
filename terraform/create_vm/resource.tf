@@ -4,11 +4,14 @@
 
 resource "proxmox_virtual_environment_file" "cloud_config" {
   content_type = "snippets"
-  datastore_id = var.datastore-id
+  datastore_id = "local"
   node_name    = var.node-name
 
   source_raw {
-    data      = file(var.user-data-path)
-    file_name = var.user-data-path
+    data = templatefile("user-data.yaml", {
+      username = var.username
+      ssh_key  = trimspace(file(var.public-ssh-key-path))
+    })
+    file_name = "${var.vm-name}-config.yaml"
   }
 }

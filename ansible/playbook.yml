@@ -16,7 +16,6 @@
   vars:
     db_name: "cytech"
     db_user: "cytech_usr"
-    # L'IP de la BDD est nécessaire ici pour le template app.py.j2
     bdd_ip: "192.168.100.135" 
     remote_user: "ethan"
     app_root: "/opt/my_app"

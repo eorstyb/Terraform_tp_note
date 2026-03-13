@@ -1,6 +1,6 @@
 - name: Installer PostgreSQL et dépendances Python pour Ansible
   apt:
-    name: ["postgresql", "postgresql-contrib", "python3-psycopg2"]
+    name: ["postgresql", "postgresql-contrib", "python3-psycopg2", "acl"]
     state: present
     update_cache: yes
 
@@ -9,11 +9,13 @@
     name: cytech_grp
     state: present
 
-- name: Créer l'utilisateur cytech_usr
-  user:
+- name: Créer l'utilisateur (rôle) PostgreSQL
+  postgresql_user:
     name: cytech_usr
-    groups: cytech_grp
-    append: yes
+    password: "{{ db_password }}"
+    role_attr_flags: "NOSUPERUSER,CREATEDB"
+  become: yes
+  become_user: postgres
 
 - name: Créer la base de données cytech
   postgresql_db:
@@ -41,15 +43,17 @@
   become_user: postgres
   notify: restart postgresql
 
-- name: Créer la table et insérer le nom
+- name: Créer la table 'etudiants' et insérer le prénom
   postgresql_query:
-    db: cytech
-    login_user: postgres
+    db: "{{ db_name }}"
     query: |
-      CREATE TABLE IF NOT EXISTS cytech_usr (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(100)
+      CREATE TABLE IF NOT EXISTS etudiants (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(50) NOT NULL
       );
-      INSERT INTO cytech_usr (name) VALUES ('Ethan') ON CONFLICT DO NOTHING;
+      ALTER TABLE etudiants OWNER TO {{ db_user }};
+      
+      TRUNCATE TABLE etudiants;
+      INSERT INTO etudiants (name) VALUES ('Ethan');
   become: yes
   become_user: postgres

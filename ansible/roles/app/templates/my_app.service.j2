@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve Flask App Cytech
+After=network.target
+
+[Service]
+User={{ ssh_user }}
+Group=www-data
+WorkingDirectory={{ app_root }}
+ExecStart={{ app_root }}/venv/bin/python3 {{ app_root }}/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -119,9 +119,9 @@ variable "provider-is-insecure" {
 }
 
 variable "ip-addresses-bdd" {
-  type        = string
+  type = string
 }
 
 variable "ip-addresses-app" {
-  type        = string
+  type = string
 }

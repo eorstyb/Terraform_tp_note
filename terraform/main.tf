@@ -1,7 +1,7 @@
 resource "local_file" "ansible_inventory" {
   filename = "${path.module}/ansible/inventory.ini"
-  
-  content  = <<EOT
+
+  content = <<EOT
 [app]
 ${module.create_app.vm_name_out} ansible_host=${module.create_app.vm_ip_out}
 
@@ -13,19 +13,19 @@ EOT
 resource "null_resource" "run_ansible" {
   # On attend que les VMs soient prêtes et l'inventaire écrit
   depends_on = [
-    module.create_app, 
-    module.create_bdd, 
+    module.create_app,
+    module.create_bdd,
     local_file.ansible_inventory
   ]
 
   provisioner "local-exec" {
     # On se déplace dans le dossier ansible et on lance le playbook
-    command = "cd ${path.module}/../ansible && ansible-playbook playbook.yml"  
+    command = "sleep 60 && cd ${path.module}/../ansible && ansible-playbook playbook.yml"
   }
 }
 
 module "create_app" {
-  source = "./create_vm"
+  source     = "./create_vm"
   depends_on = [module.create_bdd]
 
   # Config Provider
@@ -47,7 +47,7 @@ module "create_app" {
   cpu-type           = "x86-64-v2-AES"
   core-type          = "x86-64-v2-AES"
   is-stop-on-destroy = true
-  user-data-path = "user-data.yaml"
+  user-data-path     = "user-data.yaml"
 
   # Datastore
   datastore-name      = "local-lvm"
@@ -66,8 +66,8 @@ module "create_app" {
   timeout              = "5m"
   last-digits-ip       = 134
   default-id           = 1000
-  ip-addresses-bdd = "192.168.100.135"
-ip-addresses-app = "192.168.100.134"
+  ip-addresses-bdd     = "192.168.100.135"
+  ip-addresses-app     = "192.168.100.134"
 }
 
 module "create_bdd" {
@@ -92,7 +92,7 @@ module "create_bdd" {
   cpu-type           = "x86-64-v2-AES"
   core-type          = "x86-64-v2-AES"
   is-stop-on-destroy = true
-    user-data-path = "user-data.yaml"
+  user-data-path     = "user-data.yaml"
 
 
   # Datastore
@@ -112,6 +112,6 @@ module "create_bdd" {
   timeout              = "5m"
   last-digits-ip       = 135
   default-id           = 1000
-  ip-addresses-bdd = "192.168.100.135"
-ip-addresses-app = "192.168.100.134"
+  ip-addresses-bdd     = "192.168.100.135"
+  ip-addresses-app     = "192.168.100.134"
 }
