@@ -26,7 +26,7 @@
 
 - name: Configurer PostgreSQL pour écouter sur toutes les interfaces
   lineinfile:
-    path: /etc/postgresql/14/main/postgresql.conf # Vérifie la version (14 ou 15)
+    path: /etc/postgresql/14/main/postgresql.conf
     regexp: "^#?listen_addresses"
     line: "listen_addresses = '*'"
   notify: restart postgresql
@@ -37,7 +37,7 @@
     contype: host
     databases: cytech
     users: cytech_usr
-    address: "192.168.100.134/32" # IP de ton APP
+    address: "{{ hostvars[groups['app'][0]]['ansible_host'] }}/32"
     method: md5
   become: yes
   become_user: postgres

@@ -45,10 +45,10 @@ resource "proxmox_virtual_environment_vm" "ubuntu_vm" {
   connection {
     type        = var.connection-type
     user        = var.username
-    password    = var.password                   # L'utilisateur créé via Cloud-init
-    private_key = file(var.private-ssh-key-path) # VOTRE CLÉ PRIVÉE sur votre PC
-    host        = var.ip-addresses[count.index]   # L'IP fixe que vous avez définie
-    timeout     = var.timeout                    # On laisse le temps à la VM de boot
+    password    = var.password
+    private_key = file(var.private-ssh-key-path)
+    host        = var.ip-addresses[count.index]
+    timeout     = var.timeout
   }
 
   provisioner "local-exec" {

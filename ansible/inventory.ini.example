@@ -1,0 +1,5 @@
+[app]
+cytech-ethan-app ansible_host=<10.0.0.1>
+
+[bdd]
+cytech-ethan-bdd ansible_host=<10.0.0.2>

@@ -1,15 +1,12 @@
-# Config user
-ssh_user: "ethan"
-
 # Config PostgreSQL
 db_name: "cytech"
 db_user: "cytech_usr"
-db_password: "password"
+db_password: "<Insert Password>"
 
 # Config Application
 app_port: 8080
 app_root: "/opt/my_app"
 
 # Adresses IP
-app_ip: "192.168.100.134"
-bdd_ip: "192.168.100.135"
+app_ip: "<10.0.0.1>"
+bdd_ip: "<10.0.0.2>"

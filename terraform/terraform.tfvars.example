@@ -1,7 +1,7 @@
 # Config Provider
-provider-username    = "ethan@pam"
-provider-password    = "Umc2bLpu"
-provider-endpoint    = "https://192.168.100.100:8006"
+provider-username    = "<Insert Username>"
+provider-password    = "<Insert Password>"
+provider-endpoint    = "<10.0.0.1>"
 provider-is-insecure = true
 
 # Config VM
@@ -13,7 +13,7 @@ node-name          = "proxmox2"
 pool-id            = "terraform"
 my-pool-id         = "ethan-pool"
 username           = "ethan"
-password           = "ethan"
+password           = "<Insert Password>"
 ram-app               = 1024
 ram-bdd = 2048
 core               = 1
@@ -31,13 +31,13 @@ iso-path            = "jammy-server-cloudimg-amd64.img"
 
 # Network
 bridge               = "vmbr0"
-gateway              = "192.168.100.1"
-public-ssh-key-path  = "~/.ssh/id_ed25519.pub"
-private-ssh-key-path = "~/.ssh/id_ed25519"
-app-ip-addresses       = ["192.168.100.134/24"]
-bdd-ip-addresses =  ["192.168.100.135/24"]
+gateway              = "10.0.0.1"
+public-ssh-key-path  = "<Insert Public-Key Path>"
+private-ssh-key-path = "<Insert Private-Key Path>"
+app-ip-addresses       = ["10.0.0.1/24"]
+bdd-ip-addresses =  ["10.0.0.2/24"]
 connection-type      = "ssh"
 timeout              = "5m"
-app-last-digits-ip       = 134
+app-last-digits-ip       = 1
 default-id           = 1000
-bdd-last-digits-ip       = 135
+bdd-last-digits-ip       = 2

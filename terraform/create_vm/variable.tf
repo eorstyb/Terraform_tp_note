@@ -102,7 +102,6 @@ variable "iso-path" {
   type = string
 }
 
-
 variable "provider-username" {
   type = string
 }
@@ -121,12 +120,4 @@ variable "provider-is-insecure" {
 
 variable "user-data-path" {
   type = string
-}
-
-variable "ip-addresses-bdd" {
-  type        = string
-}
-
-variable "ip-addresses-app" {
-  type        = string
 }
