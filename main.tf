@@ -18,7 +18,7 @@ resource "null_resource" "run_ansible" {
   ]
 
   provisioner "local-exec" {
-    command = "sleep 60 && cd ${path.module}/../ansible && ansible-playbook playbook.yml"
+    command = "sleep 60 && cd ${path.module}/ansible && ansible-playbook playbook.yml"
   }
 }
 
